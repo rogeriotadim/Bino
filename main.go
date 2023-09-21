@@ -30,7 +30,7 @@ func init() {
 		log.Fatal("Error creating Discord session", err)
 	}
 
-	fmt.Println("Bot is now running. Press CTRL-C to exit.")
+	fmt.Println("\nBot is now running. Press CTRL-C to exit.")
 }
 
 func main() {
@@ -42,7 +42,7 @@ func main() {
 
 	// Wait here until CTRL-C or other term signal is received.
 	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 
 	Discord.Close()
@@ -59,15 +59,17 @@ func appointmentMessage(session *discordgo.Session, message *discordgo.MessageCr
 	fmt.Printf("%#v", message.Author)
 
 	// If the message is "ping" reply with "Pong!"
-	if message.Content == "agendar" {
-		if session.State.User.Email == "marcus.pereira@live.com" {
-			session.ChannelMessageSend(message.ChannelID, "Pong!")
+	if message.Content == "pong" {
+		email := "rogeriotadim@gmail.com"
+		userID := "1154476954012102708"
+		if session.State.User.ID == userID {
+			session.ChannelMessageSend(message.ChannelID, "Ping! "+email)
 		}
 	}
 
-	// If the message is "pong" reply with "Ping!"
-	if message.Content == "pong" {
-		session.ChannelMessageSend(message.ChannelID, "Ping!")
+	// If the message is "ping" reply with "Ping!"
+	if message.Content == "ping" {
+		session.ChannelMessageSend(message.ChannelID, "Poooong!")
 	}
 }
 
