@@ -3,16 +3,15 @@ version: "3.7"
 services:
   app:
     container_name: bino
-    build: .
     image: bino
     volumes:
       - .:/app
     env_file: .env.docker
-    environment:
-      - BINO_DISCORD_TOKEN
     depends_on:
-      - db
-    command: bash -c "go build -o bino && ./bino"
+      db:
+        condition: service_healthy
+        restart: true      
+    command: bash -c "sleep infinity"
   db:
     container_name: binodb
     image: mysql:8
@@ -22,3 +21,10 @@ services:
       - ./db:/docker-entrypoint-initdb.d
     ports:
       - 0.0.0.0:3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 15s
+  
